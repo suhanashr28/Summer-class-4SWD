@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Understanding HTML Links</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="privacy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="container">
+
+        <h1>Understanding HTML Links</h1>
+
+        <div class="intro">
+            Hyperlinks are the backbone of the web. They allow users to navigate
+            between pages seamlessly. Below, we explore the two main types of links:
+            <b><u>Absolute</u></b> and <b>Relative</b>.
+        </div>
+
+        <h2>1. Absolute Linking</h2>
+
+        <div class="box">
+            Absolute links point to a specific, full URL on the internet. They
+            must include the protocol (like https://) and the domain name.
+            These are typically used to link to external websites.
+        </div>
+
+        <div class="box">
+            <b>Example:</b> Learn more about web development by visiting the
+            <a href="https://en.wikipedia.org/wiki/HTTP">
+                Wikipedia page for HTTP
+            </a>.
+        </div>
+
+        <h2>2. Relative Linking</h2>
+
+        <div class="relative">
+            Relative links point to a file relative to the current file's
+            location on the same server. They do not include the protocol
+            or domain name. These are ideal for linking pages within your
+            own website because if you change your domain name, the links
+            won't break.
+        </div>
+
+        <p class="examples">Examples:</p>
+
+        <ul>
+            <li>
+                Read our <a href="about.html">About Us</a> page to meet the team.
+            </li>
+
+            <li>
+                Check out our <a href="privacy.html">Privacy Policy</a>
+                to see how we handle data.
+            </li>
+        </ul>
+
+    </div>
+
+</body>
+</html>
