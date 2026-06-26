@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All About Potatoes</title>
+</head>
+<body>
+
+    <h1>All About Potatoes</h1>
+
+    <p>
+        Potatoes are versatile, delicious, and one of the world's favorite root vegetables.
+        Below are examples of how we display images of potatoes using HTML.
+    </p>
+
+    <hr>
+
+    <h2>Example 1: Specifying Dimensions</h2>
+
+    <p>
+        This image uses the path <code>Images/potato.jpg</code>.
+        We have explicitly set the width to 300 pixels and the height to 200 pixels using HTML attributes.
+    </p>
+
+    <img src="potato.jpg" alt="Potato" width="300" height="200">
+
+    <h2>Example 2: Relative Path & Alt Text Importance</h2>
+
+    <p>
+        This image uses the path <code>./potatoes.jpg</code>.
+        If the image fails to load, the browser will display the alt text instead.
+    </p>
+
+    <img src="./potatoes.jpg" alt="Fresh Potatoes" width="400">
+
+    <p>
+        <i>
+            Note: If you only specify the width (like we did here at 400px),
+            the browser will automatically scale the height proportionally so
+            the image doesn't look stretched!
+        </i>
+    </p>
+
+</body>
+</html>
