@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Supplier</title>
+    <link rel="stylesheet" href="edit-supplier.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Suppliers</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <a href="supplier-list.html" class="back">← Back to Suppliers</a>
+
+        <div class="form-box">
+          <h1>Edit Supplier</h1>
+
+          <form>
+            <label>Supplier Name</label>
+            <input type="text" value="Dairy Farm" />
+
+            <label>Contact Email</label>
+            <input type="email" value="dairy@gmail.com" />
+
+            <label>Phone Number</label>
+            <input type="text" value="9812345678" />
+
+            <label>Address</label>
+            <textarea>Budhanilkantha, Kathmandu</textarea>
+
+            <div class="buttons">
+              <button type="button" class="cancel" onclick="suppliersPage()">Cancel</button>
+              <button type="button" class="update" onclick="suppliersPage()">Update Supplier</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

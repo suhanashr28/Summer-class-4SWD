@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="edit-product.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Suppliers</a>
+        <a href="#">Add Product</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+
+      <div class="main">
+        <a href="product.html" class="back">← Back to Products</a>
+
+        <h1>Edit Product</h1>
+
+        <form class="product-form">
+          <div class="left">
+            <label>Product Name</label>
+            <input type="text" value="Fresh Milk" />
+
+            <label>Description</label>
+            <textarea>Fresh dairy milk rich in calcium and nutrients.</textarea>
+
+            <label>Price</label>
+            <input type="number" value="120" />
+
+            <label>Quantity</label>
+            <input type="number" value="25" />
+          </div>
+
+          <div class="right">
+            <label>Category</label>
+
+            <select>
+              <option selected>Dairy</option>
+              <option>Fruits</option>
+              <option>Vegetables</option>
+              <option>Bakery</option>
+            </select>
+
+            <label>Current Image</label>
+
+            <img src="milk.jpg" alt="Milk" class="product-image" />
+
+            <input type="file" />
+          </div>
+        </form>
+
+        <div class="buttons">
+          <button class="cancel" type="button" onclick="productsPage()">Cancel</button>
+          <button class="update" type="button" onclick="productsPage()">Update Product</button>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

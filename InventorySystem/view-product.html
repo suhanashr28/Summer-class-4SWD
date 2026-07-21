@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Product</title>
+    <link rel="stylesheet" href="view-product.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#" onclick="productsPage()">Products</a>
+        <a href="#" onclick="suppliersPage()">Suppliers</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+        <a href="#" onclick="logoutPage()">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <a href="product.html" class="back">← Back to Products</a>
+
+        <div class="product-card">
+          <!-- Product Image Section -->
+          <div class="image-section">
+            <img class="main-image" src="milk.jpg" alt="Milk" />
+
+            <div class="small-images">
+              <img src="milk.jpg" alt="Milk" />
+              <img src="milk.jpg" alt="Milk" />
+              <img src="milk.jpg" alt="Milk" />
+            </div>
+          </div>
+
+          <!-- Product Details -->
+          <div class="details">
+            <div class="top">
+              <h2>Fresh Milk</h2>
+              <span class="stock">In Stock</span>
+            </div>
+
+            <p><strong>Product ID:</strong> GR001</p>
+            <p><strong>Supplier:</strong> Dairy Farm</p>
+            <p><strong>Price:</strong> Rs.120</p>
+            <p><strong>Quantity:</strong> 25</p>
+            <p><strong>Category:</strong> Dairy</p>
+
+            <p>
+              <strong>Description:</strong><br />
+              Fresh dairy milk rich in calcium and nutrients.
+            </p>
+
+            <p><strong>Created At:</strong> 12 Jul 2026</p>
+            <p><strong>Updated At:</strong> 12 Jul 2026</p>
+
+            <div class="buttons">
+              <button onclick="editProductPage()">Edit Product</button>
+              <button onclick="deleteProductPage()">Delete Product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

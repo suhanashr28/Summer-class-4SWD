@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Supplier</title>
+    <link rel="stylesheet" href="add-supplier.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="#">Dashboard</a>
+        <a href="#">Products</a>
+        <a href="#">Suppliers</a>
+        <a href="#">Reports</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <a href="supplier-list.html" class="back">← Back to Suppliers</a>
+
+        <div class="form-box">
+          <h1>Add New Supplier</h1>
+
+          <form>
+            <label>Supplier Name</label>
+            <input type="text" placeholder="Enter supplier name" />
+
+            <label>Contact Email</label>
+            <input type="email" placeholder="Enter email" />
+
+            <label>Phone Number</label>
+            <input type="tel" placeholder="Enter phone number" />
+
+            <label>Address</label>
+            <textarea placeholder="Enter address"></textarea>
+
+            <div class="buttons">
+              <button type="reset" class="cancel">Cancel</button>
+              <button type="button" class="save" onclick="suppliersPage()">Save Supplier</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
