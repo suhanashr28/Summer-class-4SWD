@@ -49,58 +49,87 @@
               <th>Products</th>
               <th>Actions</th>
             </tr>
-
-           <tr>
-  <td>Dairy Farm</td>
-  <td>dairy@gmail.com</td>
-  <td>9812345678</td>
-  <td>15</td>
-  <td class="actions">
-    <i class="fa-solid fa-eye" onclick="viewSupplierPage('dairy')"></i>
-    <i class="fa-solid fa-pen" onclick="editSupplierPage('dairy')"></i>
-    <i class="fa-solid fa-trash" onclick="deleteSupplierPage()"></i>
-  </td>
-</tr>
-
-<tr>
-  <td>Fresh Fruits Ltd</td>
-  <td>fruits@gmail.com</td>
-  <td>9800000001</td>
-  <td>20</td>
-  <td class="actions">
-    <i class="fa-solid fa-eye" onclick="viewSupplierPage('fruit')"></i>
-    <i class="fa-solid fa-pen" onclick="editSupplierPage('fruit')"></i>
-    <i class="fa-solid fa-trash" onclick="deleteSupplierPage()"></i>
-  </td>
-</tr>
-
-<tr>
-  <td>Green Vegetables</td>
-  <td>veg@gmail.com</td>
-  <td>9800000002</td>
-  <td>12</td>
-  <td class="actions">
-    <i class="fa-solid fa-eye" onclick="viewSupplierPage('vegetable')"></i>
-    <i class="fa-solid fa-pen" onclick="editSupplierPage('vegetable')"></i>
-    <i class="fa-solid fa-trash" onclick="deleteSupplierPage()"></i>
-  </td>
-</tr>
-
-<tr>
-  <td>Bakery House</td>
-  <td>bakery@gmail.com</td>
-  <td>9800000003</td>
-  <td>10</td>
-  <td class="actions">
-    <i class="fa-solid fa-eye" onclick="viewSupplierPage('bakery')"></i>
-    <i class="fa-solid fa-pen" onclick="editSupplierPage('bakery')"></i>
-    <i class="fa-solid fa-trash" onclick="deleteSupplierPage()"></i>
-  </td>
-</tr>
+            <tbody id="supplierTable"></tbody>
+              
           </table>
         </div>
       </div>
     </div>
+    <script>
+
+async function loadSuppliers(){
+
+const response = await fetch(
+"http://localhost:3000/api/suppliers"
+);
+
+const suppliers = await response.json();
+
+let html = "";
+
+suppliers.forEach(supplier => {
+
+html += `
+<tr>
+<td>${supplier.name}</td>
+<td>${supplier.email}</td>
+<td>${supplier.phone}</td>
+<td>-</td>
+<td class="actions">
+<i class="fa-solid fa-eye"
+onclick="viewSupplier(${supplier.id})"></i>
+
+<i class="fa-solid fa-pen"
+onclick="editSupplier(${supplier.id})"></i>
+
+<i class="fa-solid fa-trash"
+onclick="deleteSupplier(${supplier.id})"></i>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("supplierTable").innerHTML = html;
+
+}
+
+function viewSupplier(id){
+
+localStorage.setItem("supplierId", id);
+window.location.href = "view-supplier.html";
+
+}
+
+function editSupplier(id){
+
+localStorage.setItem("supplierId", id);
+window.location.href = "edit-supplier.html";
+
+}
+
+async function deleteSupplier(id){
+
+if(!confirm("Delete supplier?")) return;
+
+const response = await fetch(
+`http://localhost:3000/api/suppliers/${id}`,
+{
+method:"DELETE"
+}
+);
+
+const data = await response.json();
+
+alert(data.message);
+
+loadSuppliers();
+
+}
+
+loadSuppliers();
+
+</script>
     <script src="js/script.js"></script>
   </body>
 </html>
