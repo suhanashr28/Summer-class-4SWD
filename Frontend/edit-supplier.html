@@ -29,25 +29,65 @@
 
           <form>
             <label>Supplier Name</label>
-            <input type="text" value="Dairy Farm" />
+            <input type="text" id="supplierNameInput" />
 
             <label>Contact Email</label>
-            <input type="email" value="dairy@gmail.com" />
+            <input type="email" id="supplierEmailInput" />
 
             <label>Phone Number</label>
-            <input type="text" value="9812345678" />
+            <input type="text" id="supplierPhoneInput" />
 
             <label>Address</label>
-            <textarea>Budhanilkantha, Kathmandu</textarea>
+            <textarea id="supplierAddressInput"></textarea>
 
             <div class="buttons">
               <button type="button" class="cancel" onclick="suppliersPage()">Cancel</button>
-              <button type="button" class="update" onclick="suppliersPage()">Update Supplier</button>
+              <button type="button" class="update" onclick="updateSupplier()">Update Supplier</button>
             </div>
           </form>
         </div>
       </div>
     </div>
+
+    <script>
+      const suppliers = {
+        dairy: {
+          name: "Dairy Farm",
+          email: "dairy@gmail.com",
+          phone: "9812345678",
+          address: "Budhanilkantha, Kathmandu"
+        },
+        fruit: {
+          name: "Fresh Fruits Ltd",
+          email: "fruits@gmail.com",
+          phone: "9800000001",
+          address: "Bhaktapur"
+        },
+        vegetable: {
+          name: "Green Vegetables",
+          email: "veg@gmail.com",
+          phone: "9800000002",
+          address: "Lalitpur"
+        },
+        bakery: {
+          name: "Bakery House",
+          email: "bakery@gmail.com",
+          phone: "9800000003",
+          address: "Kathmandu"
+        }
+      };
+
+      // Get selected supplier from localStorage
+      const selectedSupplier = localStorage.getItem("selectedSupplier") || "dairy";
+      const s = suppliers[selectedSupplier] || suppliers.dairy;
+
+      // Fill form fields
+      document.getElementById("supplierNameInput").value = s.name;
+      document.getElementById("supplierEmailInput").value = s.email;
+      document.getElementById("supplierPhoneInput").value = s.phone;
+      document.getElementById("supplierAddressInput").value = s.address;
+    </script>
+
     <script src="js/script.js"></script>
   </body>
 </html>

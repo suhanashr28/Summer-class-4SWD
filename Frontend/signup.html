@@ -1,50 +1,82 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="css/signup.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="left">
-        <h2>📦 InventoryPro</h2>
-        <p>Create your account</p>
-      </div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup</title>
+<link rel="stylesheet" href="css/signup.css">
+</head>
 
-      <div class="right">
-        <div class="signup-box">
-          <h1>Create Account</h1>
-          <p>Fill in the details below to get started</p>
+<body>
 
-          <form>
-            <label>Full Name</label>
-            <input type="text" placeholder="Enter your full name" required />
+<div class="container">
 
-            <label>Email Address</label>
-            <input type="email" placeholder="Enter your email" required />
+  <div class="left">
+    <h2>📦 InventoryPro</h2>
+    <p>Create your account</p>
+  </div>
 
-            <label>Password</label>
-            <input type="password" placeholder="Create a password" required />
+  <div class="right">
 
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              required
-            />
+    <div class="signup-box">
 
-            <button type="button" onclick="dashboardPage()">Sign Up</button>
+      <h1>Create Account</h1>
+      <p>Fill in the details below</p>
 
-            <p class="login-link">
-              Already have an account?
-              <a href="login.html">Login</a>
-            </p>
-          </form>
-        </div>
-      </div>
+      <form id="signupForm">
+
+        <label>Full Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full name"
+          required
+        >
+
+        <label>Email Address</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+        >
+
+        <label>Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Create password"
+          required
+        >
+
+        <label>Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm password"
+          required
+        >
+
+        <button type="submit">
+          Sign Up
+        </button>
+
+        <p id="message"></p>
+
+        <p class="login-link">
+          Already have an account?
+          <a href="login.html">Login</a>
+        </p>
+
+      </form>
+
     </div>
-    <script src="js/script.js"></script>
-  </body>
+
+  </div>
+
+</div>
+
+<script src="js/signup.js"></script>
+
+</body>
 </html>
