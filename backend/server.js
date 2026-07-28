@@ -38,7 +38,7 @@ app.use(
 
 app.get("/",(req,res)=>{
 
-    res.redirect("/login.html");
+    res.redirect("/home.html");
 
 });
 
