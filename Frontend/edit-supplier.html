@@ -52,15 +52,25 @@
 
 const supplierId = localStorage.getItem("supplierId");
 
-
 // LOAD SUPPLIER
 async function loadSupplier(){
+
+    if(!supplierId){
+        alert("No supplier selected");
+        window.location.href = "supplier-list.html";
+        return;
+    }
 
     try{
 
         const response = await fetch(
-            `http://localhost:3000/api/suppliers/${supplierId}`
+            `http://localhost:3000/api/suppliers/${supplierId}`,
+            { cache: "no-store" }
         );
+
+        if(!response.ok){
+            throw new Error("Supplier not found");
+        }
 
         const supplier = await response.json();
 
@@ -118,6 +128,7 @@ async function updateSupplier(){
                 headers:{
                     "Content-Type":"application/json"
                 },
+                cache:"no-store",
                 body:JSON.stringify(updatedSupplier)
             }
         );
@@ -126,8 +137,9 @@ async function updateSupplier(){
 
         alert(data.message);
 
-        window.location.href =
-        "supplier-list.html";
+        if(data.success){
+            window.location.href = "supplier-list.html";
+        }
 
     }
 

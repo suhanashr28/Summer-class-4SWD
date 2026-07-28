@@ -70,7 +70,7 @@
                 <!-- Buttons -->
                 <div class="buttons">
                     <button class="edit"
-                        onclick="editSupplierPage(localStorage.getItem('selectedSupplier'))">
+                        onclick="window.location.href='edit-supplier.html'">
                         Edit Supplier
                     </button>
 
@@ -90,7 +90,7 @@
 
 const supplierId = localStorage.getItem("supplierId");
 
-fetch(`http://localhost:3000/api/suppliers/${supplierId}`)
+fetch(`http://localhost:3000/api/suppliers/${supplierId}`, { cache: "no-store" })
 .then(response => {
 
 if(!response.ok){

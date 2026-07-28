@@ -60,7 +60,8 @@
 async function loadSuppliers(){
 
 const response = await fetch(
-"http://localhost:3000/api/suppliers"
+"http://localhost:3000/api/suppliers",
+{ cache: "no-store" }
 );
 
 const suppliers = await response.json();

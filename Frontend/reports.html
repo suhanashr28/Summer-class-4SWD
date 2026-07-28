@@ -11,20 +11,15 @@
 <div class="container">
 
     <div class="sidebar">
-    <h2>🛒 Grocery IMS</h2>
+        <h2>🛒 Grocery IMS</h2>
 
-    <a href="dashboard.html">Dashboard</a>
-
-    <a href="#" onclick="productsPage()">Products</a>
-
-    <a href="supplier-list.html">Suppliers</a>
-
-    <a href="#" onclick="reportsPage()">Reports</a>
-
-    <a href="#" onclick="settingsPage()">Settings</a>
-
-    <a href="#" onclick="logoutPage()">Logout</a>
-</div>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#" onclick="productsPage()">Products</a>
+        <a href="supplier-list.html">Suppliers</a>
+        <a href="#" onclick="reportsPage()">Reports</a>
+        <a href="#" onclick="settingsPage()">Settings</a>
+        <a href="#" onclick="logoutPage()">Logout</a>
+    </div>
 
     <div class="main">
 
@@ -34,22 +29,22 @@
 
             <div class="card">
                 <h3>Total Products</h3>
-                <p>350</p>
+                <p id="totalProducts">0</p>
             </div>
 
             <div class="card">
                 <h3>Low Stock Items</h3>
-                <p>15</p>
+                <p id="lowStock">0</p>
             </div>
 
             <div class="card">
                 <h3>Total Suppliers</h3>
-                <p>20</p>
+                <p id="totalSuppliers">0</p>
             </div>
 
             <div class="card">
                 <h3>Total Inventory Value</h3>
-                <p>Rs. 20,000</p>
+                <p id="inventoryValue">Rs. 0</p>
             </div>
 
         </div>
@@ -67,22 +62,22 @@
 
                 <tr>
                     <td>Products Added</td>
-                    <td>50</td>
+                    <td id="productsAdded">0</td>
                 </tr>
 
                 <tr>
                     <td>Products Updated</td>
-                    <td>30</td>
+                    <td id="productsUpdated">0</td>
                 </tr>
 
                 <tr>
                     <td>Low Stock Products</td>
-                    <td>15</td>
+                    <td id="lowStockProducts">0</td>
                 </tr>
 
                 <tr>
                     <td>Suppliers Registered</td>
-                    <td>20</td>
+                    <td id="suppliersRegistered">0</td>
                 </tr>
 
             </table>
@@ -97,6 +92,81 @@
     </div>
 
 </div>
+
+<script>
+
+async function loadReport(){
+
+    try{
+
+        const productsResponse = await fetch(
+            "http://localhost:3000/api/products"
+        );
+
+        const products = await productsResponse.json();
+
+        const suppliersResponse = await fetch(
+            "http://localhost:3000/api/suppliers"
+        );
+
+        const suppliers = await suppliersResponse.json();
+
+        const totalProducts = products.length;
+
+        const totalSuppliers = suppliers.length;
+
+        const lowStock = products.filter(product =>
+            Number(product.quantity) < 5
+        ).length;
+
+        let inventoryValue = 0;
+
+        products.forEach(product => {
+
+            inventoryValue +=
+            Number(product.price) *
+            Number(product.quantity);
+
+        });
+
+        document.getElementById("totalProducts").innerText =
+        totalProducts;
+
+        document.getElementById("lowStock").innerText =
+        lowStock;
+
+        document.getElementById("totalSuppliers").innerText =
+        totalSuppliers;
+
+        document.getElementById("inventoryValue").innerText =
+        "Rs. " + inventoryValue;
+
+        document.getElementById("productsAdded").innerText =
+        totalProducts;
+
+        document.getElementById("productsUpdated").innerText =
+        totalProducts;
+
+        document.getElementById("lowStockProducts").innerText =
+        lowStock;
+
+        document.getElementById("suppliersRegistered").innerText =
+        totalSuppliers;
+
+    }
+
+    catch(error){
+
+        console.log(error);
+        alert("Cannot load report data");
+
+    }
+
+}
+
+loadReport();
+
+</script>
 
 <script src="js/script.js"></script>
 
