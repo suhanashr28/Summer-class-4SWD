@@ -508,6 +508,8 @@ app.post("/api/suppliers", (req, res) => {
   });
 
 });
+
+
 // GET SINGLE SUPPLIER
 app.get("/api/suppliers/:id", (req, res) => {
 
@@ -526,8 +528,11 @@ app.get("/api/suppliers/:id", (req, res) => {
 
 });
 
+
 // UPDATE SUPPLIER
 app.put("/api/suppliers/:id", (req, res) => {
+
+  const supplierId = Number(req.params.id);
 
   const {
     name,
@@ -537,7 +542,19 @@ app.put("/api/suppliers/:id", (req, res) => {
     image
   } = req.body;
 
-  db.prepare(`
+  // make sure the supplier actually exists first
+  const existing = db
+    .prepare("SELECT * FROM suppliers WHERE id=?")
+    .get(supplierId);
+
+  if (!existing) {
+    return res.status(404).json({
+      success: false,
+      message: "Supplier not found (id " + supplierId + ")"
+    });
+  }
+
+  const result = db.prepare(`
     UPDATE suppliers
     SET
       name=?,
@@ -551,9 +568,17 @@ app.put("/api/suppliers/:id", (req, res) => {
     email,
     phone,
     address,
-    image || "default.jpg",
-    req.params.id
+    image || existing.image || "default.jpg",
+    supplierId
   );
+
+  // tell the truth about whether anything changed
+  if (result.changes === 0) {
+    return res.json({
+      success: false,
+      message: "Nothing was updated"
+    });
+  }
 
   res.json({
     success: true,
@@ -561,6 +586,8 @@ app.put("/api/suppliers/:id", (req, res) => {
   });
 
 });
+
+
 // DELETE SUPPLIER
 app.delete("/api/suppliers/:id", (req, res) => {
 
