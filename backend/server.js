@@ -461,93 +461,119 @@ message:"Deleted"
 
 
 
-// ======================
-// SUPPLIERS
-// ======================
+// GET ALL SUPPLIERS
+app.get("/api/suppliers", (req, res) => {
 
+  const suppliers = db
+    .prepare("SELECT * FROM suppliers")
+    .all();
 
-app.get(
-"/api/suppliers",
-(req,res)=>{
-
-
-const suppliers=db
-.prepare(
-"SELECT * FROM suppliers"
-)
-.all();
-
-
-res.json(suppliers);
-
+  res.json(suppliers);
 
 });
 
 
+// ADD SUPPLIER
+app.post("/api/suppliers", (req, res) => {
 
+  const {
+    name,
+    email,
+    phone,
+    address,
+    image
+  } = req.body;
 
+  const result = db.prepare(`
+    INSERT INTO suppliers
+    (
+      name,
+      email,
+      phone,
+      address,
+      image
+    )
+    VALUES (?,?,?,?,?)
+  `).run(
+    name,
+    email,
+    phone,
+    address,
+    image || "default.jpg"
+  );
 
-app.post(
-"/api/suppliers",
-(req,res)=>{
+  res.json({
+    success: true,
+    supplierId: result.lastInsertRowid
+  });
 
+});
+// GET SINGLE SUPPLIER
+app.get("/api/suppliers/:id", (req, res) => {
 
-const {
+  const supplier = db
+    .prepare("SELECT * FROM suppliers WHERE id=?")
+    .get(req.params.id);
 
-name,
-email,
-phone,
-address,
-image
+  if (!supplier) {
+    return res.status(404).json({
+      success: false,
+      message: "Supplier not found"
+    });
+  }
 
-}=req.body;
-
-
-
-const result=db.prepare(`
-
-INSERT INTO suppliers
-
-(
-name,
-email,
-phone,
-address,
-image
-)
-
-VALUES(?,?,?,?,?)
-
-`).run(
-
-name,
-email,
-phone,
-address,
-image
-
-);
-
-
-
-res.json({
-
-success:true,
-
-supplierId:
-result.lastInsertRowid
+  res.json(supplier);
 
 });
 
+// UPDATE SUPPLIER
+app.put("/api/suppliers/:id", (req, res) => {
+
+  const {
+    name,
+    email,
+    phone,
+    address,
+    image
+  } = req.body;
+
+  db.prepare(`
+    UPDATE suppliers
+    SET
+      name=?,
+      email=?,
+      phone=?,
+      address=?,
+      image=?
+    WHERE id=?
+  `).run(
+    name,
+    email,
+    phone,
+    address,
+    image || "default.jpg",
+    req.params.id
+  );
+
+  res.json({
+    success: true,
+    message: "Supplier Updated Successfully"
+  });
 
 });
+// DELETE SUPPLIER
+app.delete("/api/suppliers/:id", (req, res) => {
 
+  db.prepare(
+    "DELETE FROM suppliers WHERE id=?"
+  ).run(req.params.id);
 
+  res.json({
+    success: true,
+    message: "Supplier Deleted Successfully"
+  });
 
-
-
-
-
+});
 
 // ======================
 // START SERVER
