@@ -27,27 +27,99 @@
         <div class="form-box">
           <h1>Add New Supplier</h1>
 
-          <form>
-            <label>Supplier Name</label>
-            <input type="text" placeholder="Enter supplier name" />
+          <form id="supplierForm">
 
-            <label>Contact Email</label>
-            <input type="email" placeholder="Enter email" />
+<label>Supplier Name</label>
+<input type="text" id="name" placeholder="Enter supplier name" />
 
-            <label>Phone Number</label>
-            <input type="tel" placeholder="Enter phone number" />
+<label>Contact Email</label>
+<input type="email" id="email" placeholder="Enter email" />
 
-            <label>Address</label>
-            <textarea placeholder="Enter address"></textarea>
+<label>Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter phone number" />
 
-            <div class="buttons">
-              <button type="reset" class="cancel">Cancel</button>
-              <button type="button" class="save" onclick="suppliersPage()">Save Supplier</button>
-            </div>
-          </form>
+<label>Address</label>
+<textarea id="address" placeholder="Enter address"></textarea>
+
+<div class="buttons">
+<button type="reset" class="cancel">Cancel</button>
+
+<button
+type="button"
+class="save"
+onclick="addSupplier()">
+Save Supplier
+</button>
+
+</div>
+
+</form>
         </div>
       </div>
     </div>
+    <script>
+
+async function addSupplier(){
+
+    const supplier = {
+
+        name:
+        document.getElementById("name").value,
+
+        email:
+        document.getElementById("email").value,
+
+        phone:
+        document.getElementById("phone").value,
+
+        address:
+        document.getElementById("address").value,
+
+        image:"default.jpg"
+
+    };
+
+    try{
+
+        const response = await fetch(
+            "http://localhost:3000/api/suppliers",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(supplier)
+            }
+        );
+
+        const data = await response.json();
+
+        if(data.success){
+
+            alert("Supplier Added Successfully");
+
+            window.location.href =
+            "supplier-list.html";
+
+        }else{
+
+            alert("Supplier Not Added");
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Server Error");
+
+    }
+
+}
+
+</script>
     <script src="js/script.js"></script>
   </body>
 </html>
