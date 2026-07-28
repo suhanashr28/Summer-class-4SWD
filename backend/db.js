@@ -7,6 +7,7 @@ const dbFile = process.env.DB_FILE || "database.db";
 const db = new Database(path.join(__dirname, dbFile));
 
 db.exec(`
+
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -36,7 +37,40 @@ CREATE TABLE IF NOT EXISTS suppliers (
     image TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    store_name TEXT,
+    email TEXT,
+    phone TEXT
+);
+
 `);
+
+
+// ADD THIS PART BELOW db.exec()
+
+const settings = db
+  .prepare("SELECT * FROM settings LIMIT 1")
+  .get();
+
+if (!settings) {
+
+  db.prepare(`
+    INSERT INTO settings
+    (
+      store_name,
+      email,
+      phone
+    )
+    VALUES (?,?,?)
+  `).run(
+    "Grocery IMS",
+    "admin@gmail.com",
+    "9812345678"
+  );
+
+}
 
 console.log(`✅ Database connected successfully (${dbFile})`);
 

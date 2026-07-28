@@ -143,7 +143,9 @@ res.json({
 
 success:true,
 
-message:"Login successful"
+message:"Login successful",
+email:user.email,
+name:user.name
 
 });
 
@@ -601,7 +603,103 @@ app.delete("/api/suppliers/:id", (req, res) => {
   });
 
 });
+// GET SETTINGS
+app.get("/api/settings", (req,res)=>{
 
+    const settings = db
+    .prepare("SELECT * FROM settings WHERE id=1")
+    .get();
+
+    res.json(settings);
+
+});
+
+// UPDATE SETTINGS
+app.put("/api/settings", (req,res)=>{
+
+    const {
+        store_name,
+        email,
+        phone
+    } = req.body;
+
+    db.prepare(`
+        UPDATE settings
+        SET
+        store_name=?,
+        email=?,
+        phone=?
+        WHERE id=1
+    `).run(
+        store_name,
+        email,
+        phone
+    );
+
+    res.json({
+        success:true,
+        message:"Settings Updated Successfully"
+    });
+
+});
+// GET USER PROFILE
+
+app.get("/api/user/:email",(req,res)=>{
+
+    const user = db
+    .prepare(
+        "SELECT id,name,email FROM users WHERE email=?"
+    )
+    .get(req.params.email);
+
+
+    if(!user){
+
+        return res.status(404).json({
+            success:false,
+            message:"User not found"
+        });
+
+    }
+
+
+    res.json(user);
+
+});
+// CHANGE PASSWORD
+
+app.put("/api/change-password/:email",(req,res)=>{
+
+    const {
+        newPassword
+    } = req.body;
+
+
+    const hash = bcrypt.hashSync(
+        newPassword,
+        10
+    );
+
+
+    db.prepare(`
+        UPDATE users
+        SET password=?
+        WHERE email=?
+    `).run(
+        hash,
+        req.params.email
+    );
+
+
+    res.json({
+
+        success:true,
+        message:"Password changed successfully"
+
+    });
+
+
+});
 // ======================
 // START SERVER
 // ======================
