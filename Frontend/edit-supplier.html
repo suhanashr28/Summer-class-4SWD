@@ -48,46 +48,103 @@
         </div>
       </div>
     </div>
+<script>
 
-    <script>
-      const suppliers = {
-        dairy: {
-          name: "Dairy Farm",
-          email: "dairy@gmail.com",
-          phone: "9812345678",
-          address: "Budhanilkantha, Kathmandu"
-        },
-        fruit: {
-          name: "Fresh Fruits Ltd",
-          email: "fruits@gmail.com",
-          phone: "9800000001",
-          address: "Bhaktapur"
-        },
-        vegetable: {
-          name: "Green Vegetables",
-          email: "veg@gmail.com",
-          phone: "9800000002",
-          address: "Lalitpur"
-        },
-        bakery: {
-          name: "Bakery House",
-          email: "bakery@gmail.com",
-          phone: "9800000003",
-          address: "Kathmandu"
-        }
-      };
+const supplierId = localStorage.getItem("supplierId");
 
-      // Get selected supplier from localStorage
-      const selectedSupplier = localStorage.getItem("selectedSupplier") || "dairy";
-      const s = suppliers[selectedSupplier] || suppliers.dairy;
 
-      // Fill form fields
-      document.getElementById("supplierNameInput").value = s.name;
-      document.getElementById("supplierEmailInput").value = s.email;
-      document.getElementById("supplierPhoneInput").value = s.phone;
-      document.getElementById("supplierAddressInput").value = s.address;
-    </script>
+// LOAD SUPPLIER
+async function loadSupplier(){
 
+    try{
+
+        const response = await fetch(
+            `http://localhost:3000/api/suppliers/${supplierId}`
+        );
+
+        const supplier = await response.json();
+
+        document.getElementById("supplierNameInput").value =
+        supplier.name;
+
+        document.getElementById("supplierEmailInput").value =
+        supplier.email;
+
+        document.getElementById("supplierPhoneInput").value =
+        supplier.phone;
+
+        document.getElementById("supplierAddressInput").value =
+        supplier.address;
+
+    }
+
+    catch(error){
+
+        console.log(error);
+        alert("Cannot load supplier");
+
+    }
+
+}
+
+
+// UPDATE SUPPLIER
+async function updateSupplier(){
+
+    const updatedSupplier = {
+
+        name:
+        document.getElementById("supplierNameInput").value,
+
+        email:
+        document.getElementById("supplierEmailInput").value,
+
+        phone:
+        document.getElementById("supplierPhoneInput").value,
+
+        address:
+        document.getElementById("supplierAddressInput").value,
+
+        image:"default.jpg"
+
+    };
+
+    try{
+
+        const response = await fetch(
+            `http://localhost:3000/api/suppliers/${supplierId}`,
+            {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(updatedSupplier)
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        window.location.href =
+        "supplier-list.html";
+
+    }
+
+    catch(error){
+
+        console.log(error);
+        alert("Update Failed");
+
+    }
+
+}
+
+
+loadSupplier();
+
+</script>
+    
     <script src="js/script.js"></script>
   </body>
 </html>

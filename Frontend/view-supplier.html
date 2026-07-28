@@ -87,32 +87,52 @@
 </div>
 
 <script>
-const selectedSupplier =
-    localStorage.getItem("selectedSupplier") || "dairy";
 
-fetch(`http://localhost:3000/suppliers/${selectedSupplier}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Supplier not found");
-        }
-        return response.json();
-    })
-    .then(s => {
-        document.getElementById("supplierName").innerText = s.name;
-        document.getElementById("supplierEmail").innerText = s.email;
-        document.getElementById("supplierPhone").innerText = s.phone;
-        document.getElementById("supplierAddress").innerText = s.address;
-        document.getElementById("supplierProducts").innerText = s.products;
-        document.getElementById("supplierImage").src = s.image;
-    })
-    .catch(error => {
-        console.error(error);
-        document.getElementById("supplierName").innerText =
-            "Supplier Not Found";
-    });
+const supplierId = localStorage.getItem("supplierId");
+
+fetch(`http://localhost:3000/api/suppliers/${supplierId}`)
+.then(response => {
+
+if(!response.ok){
+
+throw new Error("Supplier not found");
+
+}
+
+return response.json();
+
+})
+.then(supplier => {
+
+document.getElementById("supplierName").innerText =
+supplier.name;
+
+document.getElementById("supplierEmail").innerText =
+supplier.email;
+
+document.getElementById("supplierPhone").innerText =
+supplier.phone;
+
+document.getElementById("supplierAddress").innerText =
+supplier.address;
+
+document.getElementById("supplierProducts").innerText =
+supplier.products || "0";
+
+document.getElementById("supplierImage").src =
+"http://localhost:3000/uploads/" + supplier.image;
+
+})
+.catch(error => {
+
+console.log(error);
+
+document.getElementById("supplierName").innerText =
+"Supplier Not Found";
+
+});
+
 </script>
-
-<script src="js/script.js"></script>
 
 
 <script src="js/script.js"></script>
