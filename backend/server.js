@@ -1,10 +1,17 @@
 require("dotenv").config();
 
+const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const db = require("./db");
+
+// make sure the uploads folder exists before multer tries to write to it
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 
 const app = express();
@@ -18,6 +25,18 @@ const PORT = process.env.PORT || 3000;
 // ======================
 
 app.use(express.json());
+
+// allow requests from any origin (fixes silent failures if frontend
+// is opened as a file:// page or served from a different port)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 
 app.use(express.static(
@@ -54,7 +73,7 @@ const storage = multer.diskStorage({
 
     destination:function(req,file,cb){
 
-        cb(null,"uploads");
+       cb(null, path.join(__dirname, "uploads"));
 
     },
 
@@ -357,6 +376,7 @@ productId: result.lastInsertRowid
 
 app.put(
 "/api/products/:id",
+upload.single("image"),
 (req,res)=>{
 
 
@@ -377,6 +397,12 @@ const oldProduct = db.prepare(
 "SELECT image FROM products WHERE id=?"
 )
 .get(req.params.id);
+
+
+
+const image = req.file
+? req.file.filename
+: oldProduct.image;
 
 
 
@@ -404,7 +430,7 @@ price,
 quantity,
 category,
 description,
-oldProduct.image,
+image,
 req.params.id
 
 );
@@ -466,25 +492,58 @@ message:"Deleted"
 // GET ALL SUPPLIERS
 app.get("/api/suppliers", (req, res) => {
 
-  const suppliers = db
-    .prepare("SELECT * FROM suppliers")
-    .all();
+const suppliers = db.prepare(`
+SELECT
+s.*,
+COUNT(p.id) AS products
+FROM suppliers s
+LEFT JOIN products p
+ON s.name = p.supplier
+GROUP BY s.id
+`).all();
 
-  res.json(suppliers);
+res.json(suppliers);
 
 });
 
+// GET SINGLE SUPPLIER
+app.get("/api/suppliers/:id", (req, res) => {
+
+const supplier = db.prepare(`
+SELECT
+s.*,
+COUNT(p.id) AS products
+FROM suppliers s
+LEFT JOIN products p
+ON s.name = p.supplier
+WHERE s.id = ?
+GROUP BY s.id
+`).get(req.params.id);
+
+if (!supplier) {
+  return res.status(404).json({
+    success: false,
+    message: "Supplier not found"
+  });
+}
+
+res.json(supplier);
+
+});
 
 // ADD SUPPLIER
-app.post("/api/suppliers", (req, res) => {
+app.post("/api/suppliers", upload.single("image"), (req, res) => {
 
   const {
     name,
     email,
     phone,
-    address,
-    image
+    address
   } = req.body;
+
+  const image = req.file
+    ? req.file.filename
+    : "default.jpg";
 
   const result = db.prepare(`
     INSERT INTO suppliers
@@ -501,7 +560,7 @@ app.post("/api/suppliers", (req, res) => {
     email,
     phone,
     address,
-    image || "default.jpg"
+    image
   );
 
   res.json({
@@ -512,27 +571,8 @@ app.post("/api/suppliers", (req, res) => {
 });
 
 
-// GET SINGLE SUPPLIER
-app.get("/api/suppliers/:id", (req, res) => {
-
-  const supplier = db
-    .prepare("SELECT * FROM suppliers WHERE id=?")
-    .get(req.params.id);
-
-  if (!supplier) {
-    return res.status(404).json({
-      success: false,
-      message: "Supplier not found"
-    });
-  }
-
-  res.json(supplier);
-
-});
-
-
 // UPDATE SUPPLIER
-app.put("/api/suppliers/:id", (req, res) => {
+app.put("/api/suppliers/:id", upload.single("image"), (req, res) => {
 
   const supplierId = Number(req.params.id);
 
@@ -540,8 +580,7 @@ app.put("/api/suppliers/:id", (req, res) => {
     name,
     email,
     phone,
-    address,
-    image
+    address
   } = req.body;
 
   // make sure the supplier actually exists first
@@ -556,7 +595,11 @@ app.put("/api/suppliers/:id", (req, res) => {
     });
   }
 
-  const result = db.prepare(`
+  const image = req.file
+    ? req.file.filename
+    : existing.image;
+
+  db.prepare(`
     UPDATE suppliers
     SET
       name=?,
@@ -570,17 +613,9 @@ app.put("/api/suppliers/:id", (req, res) => {
     email,
     phone,
     address,
-    image || existing.image || "default.jpg",
+    image,
     supplierId
   );
-
-  // tell the truth about whether anything changed
-  if (result.changes === 0) {
-    return res.json({
-      success: false,
-      message: "Nothing was updated"
-    });
-  }
 
   res.json({
     success: true,
@@ -642,6 +677,47 @@ app.put("/api/settings", (req,res)=>{
     });
 
 });
+// ======================
+// UPDATE USER PROFILE
+// ======================
+
+app.put("/api/user/:email", (req, res) => {
+
+    const {
+        name,
+        email
+    } = req.body;
+
+    const existing = db.prepare(
+        "SELECT * FROM users WHERE email=?"
+    ).get(req.params.email);
+
+    if (!existing) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found"
+        });
+    }
+
+    db.prepare(`
+        UPDATE users
+        SET
+            name=?,
+            email=?
+        WHERE email=?
+    `).run(
+        name,
+        email,
+        req.params.email
+    );
+
+    res.json({
+        success: true,
+        message: "Profile updated successfully"
+    });
+
+});
+
 // GET USER PROFILE
 
 app.get("/api/user/:email",(req,res)=>{
@@ -700,6 +776,19 @@ app.put("/api/change-password/:email",(req,res)=>{
 
 
 });
+// ======================
+// ERROR HANDLER (catches multer/db errors so the client gets JSON, not an HTML crash page)
+// ======================
+
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+  res.status(500).json({
+    success: false,
+    message: err.message || "Something went wrong"
+  });
+});
+
+
 // ======================
 // START SERVER
 // ======================
